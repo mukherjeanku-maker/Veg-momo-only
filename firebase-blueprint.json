@@ -1,0 +1,65 @@
+{
+  "entities": {
+    "Conversation": {
+      "title": "Conversation",
+      "description": "A conversation container",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique conversation identifier" },
+        "createdAt": { "type": "number", "description": "Timestamp created" },
+        "updatedAt": { "type": "number", "description": "Timestamp updated" },
+        "firstMessageSent": { "type": "boolean", "description": "Whether first reply has been sent" }
+      }
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A chat message within the conversation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Message ID" },
+        "senderId": { "type": "string", "description": "Sender User ID or local ID" },
+        "senderName": { "type": "string", "description": "Sender Display Name" },
+        "senderRole": { "type": "string", "description": "Role: me or sudipta" },
+        "text": { "type": "string", "description": "Content of the message", "maxLength": 1000 },
+        "createdAt": { "type": "number", "description": "Epoch timestamp of message" },
+        "reactions": { "type": "object", "description": "Emoji reactions grouped by emoji" }
+      },
+      "required": ["senderName", "text", "createdAt"]
+    },
+    "Visitor": {
+      "title": "Visitor",
+      "description": "Anonymous visit record and progress state",
+      "type": "object",
+      "properties": {
+        "visitorId": { "type": "string", "description": "Anonymous first-party visitor ID" },
+        "firstVisitAt": { "type": "number", "description": "Epoch timestamp of first visit" },
+        "lastVisitAt": { "type": "number", "description": "Epoch timestamp of latest visit" },
+        "visitCount": { "type": "number", "description": "Total visits from this browser" },
+        "currentPage": { "type": "number", "description": "Current page index (1-7)" },
+        "maxPageReached": { "type": "number", "description": "Max page reached (1-7)" },
+        "reachedEnd": { "type": "boolean", "description": "Whether final page was reached" },
+        "openedChat": { "type": "boolean", "description": "Whether chat was opened" },
+        "sentMessage": { "type": "boolean", "description": "Whether visitor sent a message" },
+        "lastActivityAt": { "type": "number", "description": "Timestamp of last interaction" },
+        "inviteToken": { "type": "string", "description": "Optional private non-guessable invitation token" },
+        "isOwnerAdmin": { "type": "boolean", "description": "Whether session is owner admin" }
+      },
+      "required": ["visitorId", "firstVisitAt", "lastVisitAt", "visitCount"]
+    }
+  },
+  "firestore": {
+    "/conversations/{conversationId}": {
+      "schema": "Conversation",
+      "description": "Conversation meta document"
+    },
+    "/conversations/{conversationId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Chat messages within the conversation"
+    },
+    "/visitors/{visitorId}": {
+      "schema": "Visitor",
+      "description": "Anonymous visitor session record"
+    }
+  }
+}
+
